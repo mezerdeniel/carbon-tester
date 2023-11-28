@@ -1,0 +1,22 @@
+{
+  "url": "https://www.bfh.ch/ti/en/",
+  "green": true,
+  "bytes": 1806548,
+  "cleanerThan": 0.58,
+  "rating": "C",
+  "statistics": {
+    "adjustedBytes": 1363943.74,
+    "energy": 0.0010289199924096465,
+    "co2": {
+      "grid": {
+        "grams": 0.45478263664506374,
+        "litres": 0.2529501025019844
+      },
+      "renewable": {
+        "grams": 0.3942821410913766,
+        "litres": 0.21929972687502364
+      }
+    }
+  },
+  "timestamp": 1700742472
+}

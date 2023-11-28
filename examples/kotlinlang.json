@@ -1,0 +1,22 @@
+{
+  "url": "https://kotlinlang.org/",
+  "green": "unknown",
+  "bytes": 3926324,
+  "cleanerThan": 0.25,
+  "rating": "F",
+  "statistics": {
+    "adjustedBytes": 2964374.62,
+    "energy": 0.002236239092610777,
+    "co2": {
+      "grid": {
+        "grams": 0.9884176789339634,
+        "litres": 0.5497579130230703
+      },
+      "renewable": {
+        "grams": 0.8569268202884497,
+        "litres": 0.47662269744443564
+      }
+    }
+  },
+  "timestamp": 1700742317
+}

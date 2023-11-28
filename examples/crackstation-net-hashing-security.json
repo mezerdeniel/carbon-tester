@@ -1,0 +1,22 @@
+{
+  "url": "https://crackstation.net/hashing-security.htm",
+  "green": true,
+  "bytes": 107886,
+  "cleanerThan": 0.97,
+  "rating": "A+",
+  "statistics": {
+    "adjustedBytes": 81453.93,
+    "energy": 0.00006144650587812066,
+    "co2": {
+      "grid": {
+        "grams": 0.027159355598129334,
+        "litres": 0.015106033583679533
+      },
+      "renewable": {
+        "grams": 0.02354630105249584,
+        "litres": 0.013096452645398184
+      }
+    }
+  },
+  "timestamp": 1700724344
+}

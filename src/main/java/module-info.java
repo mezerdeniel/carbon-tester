@@ -15,4 +15,6 @@ module carbonfx {
 	// FasterXML JSON library
 	requires com.fasterxml.jackson.core;
 	requires com.fasterxml.jackson.databind;
+	requires org.json;
+	requires java.sql;
 }

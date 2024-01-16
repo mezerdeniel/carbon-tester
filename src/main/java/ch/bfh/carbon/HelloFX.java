@@ -1,6 +1,6 @@
 /*
-	* Project and Training 2: Carbon - Computer Science, Berner Fachhochschule
-	*/
+ * Project and Training 2: Carbon - Computer Science, Berner Fachhochschule
+ */
 package ch.bfh.carbon;
 
 import javafx.application.Application;
@@ -13,6 +13,8 @@ import javafx.stage.Stage;
  * Dummy application class demonstrating a JavaFX application.
  */
 public class HelloFX extends Application {
+	private static final int WIDTH = 640;
+	private static final int HEIGHT = 480;
 
 	/**
 	 * Start method called by the JavaFX framework upon calling launch().
@@ -21,9 +23,9 @@ public class HelloFX extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+		Parent root = new FXMLLoader(getClass().getResource("sample.fxml")).load();
 		stage.setTitle("Website Carbon Tester");
-		stage.setScene(new Scene(root, 640, 480));
+		stage.setScene(new Scene(root, WIDTH, HEIGHT));
 		stage.show();
 	}
 

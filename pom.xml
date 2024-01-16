@@ -61,11 +61,16 @@
 	  <version>${junit.jupiter.version}</version>
 	  <scope>test</scope>
 	</dependency>
+	  <dependency>
+		  <groupId>org.json</groupId>
+		  <artifactId>json</artifactId>
+		  <version>20220924</version>
+	  </dependency>
   </dependencies>
 
   <build>
 	<pluginManagement>
-	  <!-- Use 'mvn versions:display-plugin-updates' to check if newer plugins 
+	  <!-- Use 'mvn versions:display-plugin-updates' to check if newer plugins
 		   are available -->
 	  <plugins>
 		<plugin>

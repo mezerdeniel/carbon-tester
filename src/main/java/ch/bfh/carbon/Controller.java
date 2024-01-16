@@ -162,7 +162,192 @@ public class Controller {
 	}
 }
 	/**
-	 * Changes the language of the application. When the User clicks on ether of the buttons (en, de, fr).
+	 * Changes the language of the application. When the User clicks on ether of the buttons (en, de, ).
 	 *
 	 * @param language The language code (e.g., "en", "de", "fr")
 	 */
+	private void changeLanguage(String language) {
+		// Set the new language and load the corresponding resources
+		locale = new Locale(language);
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);
+		CarbonData.setLocale();
+
+		// Update the text for the languages selected
+		languageButton.setText(resourceBundle.getString("menu.language.text"));
+		saveItem.setText(resourceBundle.getString("menu.file.save.text"));
+		exitItem.setText(resourceBundle.getString("menu.file.exit.text"));
+		aboutItem.setText(resourceBundle.getString("menu.help.about.text"));
+		deleteRowButton.setText(resourceBundle.getString("button.deleteRow.text"));
+		deleteAllButton.setText(resourceBundle.getString("button.deleteAll.text"));
+		fileButton.setText(resourceBundle.getString("menu.file.text"));
+		helpButton.setText(resourceBundle.getString("menu.help.text"));
+		url.setText(resourceBundle.getString("label.enterUrl.text"));
+		timestampCol.setText(resourceBundle.getString("table.timestamp.text"));
+		greenCol.setText(resourceBundle.getString("table.greenColumn.text"));
+		cleanerThanCol.setText(resourceBundle.getString("table.cleanerThan.text"));
+		view.setPlaceholder(new Label(resourceBundle.getString("table.placeholder.text")));
+		//Update the values in the table
+		for (CarbonData data : dataModel.getData()) {
+			view.refresh();
+		}
+	}
+/**
+ * Displays the About dialog. When the User clicks on the help button. A window is being created, the text for the
+ * title and inside the window is being added, the max width and height is set and then finally displayed.
+ */
+	private void showAboutDialog() {
+	ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);
+	String title = resourceBundle.getString("aboutDialog.title");
+
+	TextArea contentTextArea = new TextArea(resourceBundle.getString("aboutDialog.content"));
+	contentTextArea.setEditable(false);
+	contentTextArea.setWrapText(true);
+	contentTextArea.setMaxWidth(Double.MAX_VALUE);
+	contentTextArea.setMaxHeight(Double.MAX_VALUE);
+
+	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+	alert.setTitle(title);
+	alert.setHeaderText(null);
+	alert.getDialogPane().setContent(contentTextArea);
+
+	alert.getDialogPane().setPrefWidth(DIALOG_WIDTH); // Width of the window
+	alert.getDialogPane().setPrefHeight(DIALOG_HEIGHT); // High of the window
+	alert.showAndWait();
+}
+
+
+/**
+ * Displays an error message. By creating a window with no title and with the according errorMassage given when an
+ * exception is thrown. Then displays the window to the user.
+ *
+ * @param errorMessage The error message to be displayed.
+ */
+private void showError(String errorMessage) {
+	ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);
+	Alert alert = new Alert(Alert.AlertType.ERROR);
+	alert.setHeaderText(null);
+	alert.setTitle(resourceBundle.getString("error.title"));
+	//Translated error message
+	alert.setContentText(resourceBundle.getString("error." + errorMessage));
+	alert.showAndWait();
+}
+
+/**
+ * Sets the timestamp for the added or loaded URLs. The format is changed automatically according to the language
+ * selected by the User.
+ *
+ * @param timestamp the time the URL has been added to the list.
+ * @return the time in the corresponding DateTimePattern.
+ */
+private String formatTimestamp(Long timestamp) {
+	String language = locale.getLanguage();
+	ZoneId zoneId;
+	DateTimeFormatter formatter;
+	switch (language) {
+		case "en" -> {
+			zoneId = ZoneId.of("Europe/London");
+			formatter = DateTimeFormatter.ofPattern("M/d/yy, h:mm a", locale);
+		}
+		case "de" -> {
+			zoneId = ZoneId.of("Europe/Berlin");
+			formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm", locale);
+		}
+		default -> {
+			// Default to GMT if language is not supported
+			zoneId = ZoneId.of("GMT");
+			formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy, hh:mm a", locale);
+		}
+	}
+
+	LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), zoneId);
+	return dateTime.format(formatter);
+}
+
+/**
+ * Sets the String if a website is green. By checking if the given String is "true", "false" or something else.
+ * And setting the column accordingly.
+ *
+ * @param greenValue a String which shows if the URL is green.
+ * @return the according String in the Column.
+ */
+private String localizeGreenValue(String greenValue) {
+	ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);
+	return switch (greenValue.toLowerCase()) {
+		case "true" -> resourceBundle.getString("table.greenColumn.true");
+		case "false" -> resourceBundle.getString("table.greenColumn.false");
+		default -> resourceBundle.getString("table.greenColumn.unknown");
+	};
+}
+
+/**
+ * Loads data from a file and populates the table.
+ *
+ * @throws JSONException if no JSON object is found.
+ * IOException   if the file cannot be read.
+ *
+ */
+private void loadData() {
+	try {
+		dataModel.getData().clear();
+		List<CarbonData> dataList = CarbonData.loadFromJSONFile(DATA_FILE_PATH + DATA_FILE_NAME);
+		dataModel.getData().addAll(dataList);
+	} catch (IOException e) {
+		// Handling IOException
+		e.printStackTrace();
+		showError("IOException");
+	} catch (JSONException e) {
+		// Handling JSONException
+		e.printStackTrace();
+		showError("JSONException");
+	}
+}
+
+/**
+ * Saves the data to a file.
+ * @throws JSONException if no JSON object is found.
+ * IOException if the file does not allow to be accessed.
+ */
+private void saveData() {
+	try {
+		CarbonData.saveToJSONFile(dataModel.getData(), DATA_FILE_PATH + DATA_FILE_NAME);
+	} catch (IOException e) {
+		e.printStackTrace();
+		showError("IOException");
+	} catch (JSONException e) {
+		e.printStackTrace();
+		showError("JSONException");
+	}
+}
+
+/**
+ * Reads all characters from a reader and returns them as a string.
+ *
+ * @param rd The reader to read from
+ * @return The string containing all the characters read from the reader
+ * @throws IOException If an I/O error occurs while reading from the reader
+ */
+private static String readAll(Reader rd) throws IOException {
+	StringBuilder sb = new StringBuilder();
+	int value;
+	while ((value = rd.read()) != -1) {
+		sb.append((char) value);
+	}
+	return sb.toString();
+}
+
+/**
+ * Reads JSON data from a URL and returns it as a JSONObject.
+ *
+ * @param url The URL to read the JSON data from
+ * @return The JSONObject containing the JSON data
+ * @throws IOException   If the BufferReader can not access the URL
+ * @throws JSONException If the JSON data is invalid or cannot be parsed
+ */
+public static JSONObject readJsFromUrl(String url) throws IOException, JSONException {
+	//Reads the JSON data from the URL
+	try (InputStream is = new URL(url).openStream()) {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+		String text = readAll(reader);
+		return new JSONObject(text);
+	}
+}

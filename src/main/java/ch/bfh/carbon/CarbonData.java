@@ -22,7 +22,7 @@ public class CarbonData {
     private long timestamp;
 
     /**
-     * Constructs a new WebsiteCarbonData object with the specified parameters.
+     * Constructs a new CarbonData object with the specified parameters.
      *
      * @param url         The URL of the website
      * @param green       The green status of the website
@@ -103,16 +103,16 @@ public class CarbonData {
     /**
      * Sets the cleanliness rating of the website.
      *
-     * @param cleanerThan The cleanliness rating of the website
+     * @param cleanerThan The cleanliness rating.
      */
     public void setCleanerThan(double cleanerThan) {
         this.cleanerThan = cleanerThan;
     }
 
     /**
-     * Returns the formatted timestamp of the data.
+     * Returns the formatted timestamp.
      *
-     * @return The formatted timestamp of the data
+     * @return The formatted timestamp.
      */
     public long getTimestamp() {
         return timestamp;
@@ -129,7 +129,7 @@ public class CarbonData {
     }
 
     /**
-     * Converts the WebsiteCarbonData object to a JSON object.
+     * Converts the CarbonData object to a JSON object.
      *
      * @return The JSON representation of the object
      * @throws JSONException if there is an error during JSON conversion
@@ -148,3 +148,97 @@ public class CarbonData {
             throw new JSONException("");
         }
     }
+
+    /**
+     * Converts a JSON object to a CarbonData object.
+     *
+     * @param jsonObject The JSON object to convert
+     * @return The converted WebsiteCarbonData object
+     * @throws JSONException if there is an error during JSON conversion
+     */
+    public static CarbonData fromJSON(JSONObject jsonObject) throws JSONException {
+        try {
+            //Extracts the data from the JSON object and creates a new WebsiteCarbonData object
+            String url = jsonObject.getString("url");
+            String green = "unknown";
+            if (jsonObject.has("green")) {
+                Object greenValue = jsonObject.get("green");
+                green = greenValue.toString();
+            }
+            long bytes = jsonObject.getLong("bytes");
+            double cleanerThan = jsonObject.getDouble("cleanerThan");
+            long timestamp = jsonObject.getLong("timestamp");
+            return new CarbonData(url, green, bytes, cleanerThan, timestamp);
+        } catch (JSONException e) {
+            String errorMessage = "An error occurred while parsing the JSON object: " + e.getMessage();
+            throw new JSONException(errorMessage);
+        }
+    }
+
+    /**
+     * Loads a list of CarbonData objects from a JSON file.
+     *
+     * @param filePath The path of the JSON file to load
+     * @return The list of WebsiteCarbonData objects loaded from the file
+     * @throws IOException   if there is an error reading the file
+     * @throws JSONException if there is an error during JSON conversion
+     */
+    public static List<CarbonData> loadFromJSONFile(String filePath) throws IOException, JSONException {
+        List<CarbonData> dataList = new ArrayList<>();
+        File file = new File(filePath);
+        if (file.exists()) {
+            try (FileReader fileReader = new FileReader(file);
+                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                StringBuilder jsonData = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    jsonData.append(line);
+                }
+                //Iterates through the JSON file and adds the data to the dataList
+                JSONArray jsonArray = new JSONArray(jsonData.toString());
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        JSONObject dataObj = jsonArray.getJSONObject(i);
+                        CarbonData websiteData = CarbonData.fromJSON(dataObj);
+                        dataList.add(websiteData);
+                    } catch (JSONException e) {
+                        String errorMessage = "An error occurred while parsing JSON data at index " + i
+                                + ": " + e.getMessage();
+                        throw new JSONException(errorMessage);
+                    }
+                }
+            }
+        }
+        return dataList;
+    }
+
+    /**
+     * Saves a list of CarbonData objects to a JSON file.
+     *
+     * @param dataList The list of WebsiteCarbonData objects to save
+     * @param filePath The path of the JSON file to save
+     * @throws IOException   if there is an error writing to the file
+     * @throws JSONException if there is an error during JSON conversion
+     */
+    public static void saveToJSONFile(List<CarbonData> dataList, String filePath)
+            throws IOException, JSONException {
+        JSONArray jsonArray = new JSONArray();
+        //Converts the list of WebsiteCarbonData objects to a JSON array
+        for (CarbonData websiteData : dataList) {
+            try {
+                JSONObject dataObj = websiteData.toJSON();
+                jsonArray.put(dataObj);
+            } catch (JSONException e) {
+                String errorMessage = "An error occurred while creating JSON data for CarbonData: "
+                        + e.getMessage();
+                throw new JSONException(errorMessage);
+            }
+        }
+        //Writes to the file
+        try (FileWriter fileWriter = new FileWriter(filePath);
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(jsonArray.toString());
+        }
+    }
+
+}

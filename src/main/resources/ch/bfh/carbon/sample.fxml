@@ -11,15 +11,14 @@
 
     <children>
         <MenuBar>
-            <Menu text="File" fx:id="fileButton" >
+            <Menu text="File" fx:id="file_button" >
                 <MenuItem fx:id="menuItemSave" text="Save"/>
                 <MenuItem fx:id="menuItemExit" text="Exit"/>
             </Menu>
-            <Menu text="Help" fx:id="helpButton">
+            <Menu text="Help" fx:id="help_button">
                 <MenuItem fx:id="menuItemAbout" text="About"/>
             </Menu>
-            <Menu text="Language" fx:id="languageButton">
-                <MenuItem fx:id="menuItemFR" text="FR"/>
+            <Menu text="Language" fx:id="language_button">
                 <MenuItem fx:id="menuItemEN" text="EN"/>
                 <MenuItem fx:id="menuItemDE" text="DE"/>
             </Menu>
@@ -31,18 +30,18 @@
         </VBox>
         <HBox>
             <Label text="Enter URL to analyse:" fx:id="url"/>
-            <TextField fx:id="inputUrl" promptText="https://www.srf.ch"/>
+            <TextField fx:id="input_URL" promptText="https://www.srf.ch"/>
         </HBox>
         <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
             <!-- TableColumn definitions will be created in the Controller -->
-            <TableColumn fx:id="urlColumn" text="URL"/>
-            <TableColumn fx:id="greenColumn" text="Green"/>
-            <TableColumn fx:id="bytesColumn" text="Bytes"/>
-            <TableColumn fx:id="cleanerThanColumn" text="CleanerThan"/>
-            <TableColumn fx:id="timestampColumn" text="Accessed On"/>
+            <TableColumn fx:id="urlCol" text="URL"/>
+            <TableColumn fx:id="greenCol" text="Green"/>
+            <TableColumn fx:id="bytesCol" text="Bytes"/>
+            <TableColumn fx:id="cleanerThanCol" text="CleanerThan"/>
+            <TableColumn fx:id="timestampCol" text="Accessed On"/>
         </TableView>
         <HBox spacing="10">
-            <Button fx:id="deleteRowButton" text="Delete Row"/>
+            <Button fx:id="deleteARowButton" text="Delete Row"/>
             <Button fx:id="deleteAllButton" text="Delete All"/>
         </HBox>
     </VBox>

@@ -135,7 +135,7 @@ public class CarbonData {
      * @throws JSONException if there is an error during JSON conversion
      */
     public JSONObject toJSON() throws JSONException {
-        //Converts the WebsiteCarbonData object to a JSON object
+        //Converts the CarbonData object to a JSON object
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("url", url);
@@ -158,7 +158,7 @@ public class CarbonData {
      */
     public static CarbonData fromJSON(JSONObject jsonObject) throws JSONException {
         try {
-            //Extracts the data from the JSON object and creates a new WebsiteCarbonData object
+            //Extracts the data from the JSON object and creates a new CarbonData object
             String url = jsonObject.getString("url");
             String green = "unknown";
             if (jsonObject.has("green")) {
@@ -223,7 +223,7 @@ public class CarbonData {
     public static void saveToJSONFile(List<CarbonData> dataList, String filePath)
             throws IOException, JSONException {
         JSONArray jsonArray = new JSONArray();
-        //Converts the list of WebsiteCarbonData objects to a JSON array
+        //Converts the list of CarbonData objects to a JSON array
         for (CarbonData websiteData : dataList) {
             try {
                 JSONObject dataObj = websiteData.toJSON();

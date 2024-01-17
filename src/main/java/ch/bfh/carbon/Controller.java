@@ -107,8 +107,8 @@ public class Controller {
         loadData();
 
 
-        menuItemDE.setOnAction(event -> changeLanguage("de"));
-        menuItemEN.setOnAction(event -> changeLanguage("en"));
+        menuItemDE.setOnAction(event -> changeTheLanguage("de"));
+        menuItemEN.setOnAction(event -> changeTheLanguage("en"));
         menuItemSave.setOnAction(event -> saveData());
         menuItemExit.setOnAction(event -> System.exit(0));
         menuItemAbout.setOnAction(event -> showDialog());
@@ -157,7 +157,7 @@ public class Controller {
                 addUrl();
             }
         });
-        changeLanguage("en");
+        changeTheLanguage("en");
 
     }
 
@@ -166,7 +166,7 @@ public class Controller {
      *
      * @param language The language code (e.g., "en", "de", "fr")
      */
-    private void changeLanguage(String language) {
+    private void changeTheLanguage(String language) {
         // Set the new language and load the corresponding resources
         locale = new Locale(language);
         ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);

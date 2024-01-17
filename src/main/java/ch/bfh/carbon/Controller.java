@@ -54,8 +54,6 @@ public class Controller {
     @FXML
     public MenuItem menuItemAbout;
     @FXML
-    public MenuItem menuItemFR;
-    @FXML
     public MenuItem menuItemDE;
     @FXML
     public MenuItem menuItemEN;
@@ -72,7 +70,7 @@ public class Controller {
     @FXML
     public TableColumn<CarbonData, String> timestampCol;
     @FXML
-    public TextField inputUrl;
+    public TextField input_URL;
     @FXML
     public Button deleteARowButton;
     @FXML
@@ -108,12 +106,12 @@ public class Controller {
         // Initialize and load data from a file
         loadData();
 
-        menuItemFR.setOnAction(event -> changeLanguage("fr"));
+
         menuItemDE.setOnAction(event -> changeLanguage("de"));
         menuItemEN.setOnAction(event -> changeLanguage("en"));
         menuItemSave.setOnAction(event -> saveData());
         menuItemExit.setOnAction(event -> System.exit(0));
-        menuItemAbout.setOnAction(event -> showAboutDialog());
+        menuItemAbout.setOnAction(event -> showDialog());
         deleteAllButton.setOnAction(event -> deleteAllRows());
         deleteARowButton.setOnAction(event -> deleteSelectedRow());
 
@@ -147,14 +145,14 @@ public class Controller {
         // Set the cell factory for the timestamp column to display the timestamp for the different languages
         timestampCol.setCellValueFactory(cellData -> {
             Long timestamp = cellData.getValue().getTimestamp();
-            String formattedTimestamp = formatTimestamp(timestamp);
+            String formattedTimestamp = timestampFormat(timestamp);
             return new SimpleStringProperty(formattedTimestamp);
         });
 
         tableView.setItems(model.getData());
 
         // Set up the input field for the URL
-        inputUrl.setOnKeyPressed(event -> {
+        input_URL.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 addUrl();
             }
@@ -198,7 +196,7 @@ public class Controller {
      * Displays the About dialog. When the User clicks on the help button. A window is being created, the text for the
      * title and inside the window is being added, the max width and height is set and then finally displayed.
      */
-    private void showAboutDialog() {
+    private void showDialog() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);
         String title = resourceBundle.getString("aboutDialog.title");
 
@@ -241,7 +239,7 @@ public class Controller {
      * @param timestamp the time the URL has been added to the list.
      * @return the time in the corresponding DateTimePattern.
      */
-    private String formatTimestamp(Long timestamp) {
+    private String timestampFormat(Long timestamp) {
         String language = locale.getLanguage();
         ZoneId zoneId;
         DateTimeFormatter formatter;
@@ -253,10 +251,6 @@ public class Controller {
             case "de" -> {
                 zoneId = ZoneId.of("Europe/Berlin");
                 formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm", locale);
-            }
-            case "fr" -> {
-                zoneId = ZoneId.of("Europe/Paris");
-                formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm", locale);
             }
             default -> {
                 // Default to GMT if language is not supported
@@ -368,7 +362,7 @@ public class Controller {
      */
     private void addUrl() {
         try {
-            String urlEntry = "https://api.websitecarbon.com/site?url=" + inputUrl.getText();
+            String urlEntry = "https://api.websitecarbon.com/site?url=" + input_URL.getText();
             JSONObject jsObj = readJsonFromUrl(urlEntry);
 
             // Get values from JSON

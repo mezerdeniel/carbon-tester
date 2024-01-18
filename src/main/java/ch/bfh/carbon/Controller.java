@@ -362,6 +362,7 @@ public class Controller {
      */
     private void addUrl() {
         try {
+            //site doesn't work, tried it with example, the code works
             String urlEntry = "https://api.websitecarbon.com/site?url=" + input_URL.getText();
             JSONObject jsObj = readJsonFromUrl(urlEntry);
 

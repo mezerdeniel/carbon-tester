@@ -1,4 +1,4 @@
 .table-view .column-header .label {
     -fx-alignment: CENTER-LEFT;
-    -fx-text-fill: dark blue;
+    -fx-text-fill: blue;
 }
